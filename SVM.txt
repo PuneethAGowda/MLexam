@@ -1,0 +1,144 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+from sklearn.svm import SVC
+from sklearn import svm
+import numpy as np
+
+
+# In[2]:
+
+
+X=np.array([[3,4],[1,4],[2,3],[6,-1],[7,-1],[5,-3]])
+y=np.array([-1,-1,-1,1,1,1])
+
+
+# In[3]:
+
+
+l=SVC(C=1e5,kernel='linear')
+l.fit(X,y)
+
+
+# In[4]:
+
+
+print('w= ',l.coef_)
+print('b= ',l.intercept_)
+print('Indices of support vectors= ',l.support_)
+print('Support vectors= ',l.support_vectors_)
+print('No. of support vectors from each class= ',l.n_support_)
+print('coefficient of support vectors in decision function= ',np.abs(l.dual_coef_))
+
+
+# In[5]:
+
+
+import pandas as pd
+data=pd.read_csv(r'\Users\Puneeth\Desktop\ML LAB\SVM\glass(For SVM Program).csv')
+data.head()
+
+
+# In[6]:
+
+
+x=data.drop('Type',axis=1)
+y=data.Type
+
+
+# In[7]:
+
+
+from sklearn.model_selection import train_test_split
+x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3)
+
+
+# In[8]:
+
+
+linear=svm.SVC(kernel='linear')
+linear.fit(x_train,y_train)
+
+
+# In[9]:
+
+
+print(linear.support_vectors_)
+
+
+# In[10]:
+
+
+print(linear.n_support_)
+
+
+# In[11]:
+
+
+y_pred=linear.predict(x_test)
+
+
+# In[12]:
+
+
+from sklearn.metrics import accuracy_score
+print(accuracy_score(y_test,y_pred))
+
+
+# In[13]:
+
+
+
+from sklearn.metrics import confusion_matrix
+print(confusion_matrix(y_test,y_pred))
+
+
+# In[14]:
+
+
+from sklearn.metrics import classification_report
+print(classification_report(y_test,y_pred))
+
+
+# In[15]:
+
+
+
+model1=SVC(kernel='sigmoid')
+model2=SVC(kernel='poly')
+model3=SVC(kernel='rbf')
+
+
+# In[16]:
+
+
+model1.fit(x_train,y_train)
+model2.fit(x_train,y_train)
+model3.fit(x_train,y_train)
+
+
+# In[17]:
+
+
+y_pred1=model1.predict(x_test)
+y_pred2=model2.predict(x_test)
+y_pred3=model3.predict(x_test)
+
+
+# In[18]:
+
+
+
+print("prediction by model1 ",accuracy_score(y_test,y_pred1))
+print("prediction by model2",accuracy_score(y_test,y_pred2))
+print("prediction by model3",accuracy_score(y_test,y_pred1))
+
+
+# In[ ]:
+
+
+
+

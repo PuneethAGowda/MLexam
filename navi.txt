@@ -1,0 +1,95 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import pandas as pd
+import numpy as np
+
+
+# In[4]:
+
+
+data = pd.read_csv(r'\Users\Puneeth\Desktop\ML LAB\NAIVE\covid(For Naive Bayes Program).csv')
+
+
+# In[5]:
+
+
+data
+
+
+# In[6]:
+
+
+from sklearn import preprocessing
+le = preprocessing.LabelEncoder()
+pc_encoded=le.fit_transform(data['pc'].values)
+wbc_encoded=le.fit_transform(data['wbc'].values)
+mc_encoded=le.fit_transform(data['mc'].values)
+ast_encoded=le.fit_transform(data['ast'].values)
+bc_encoded=le.fit_transform(data['bc'].values)
+ldh_encoded=le.fit_transform(data['ldh'].values)
+Y=le.fit_transform(data['diagnosis'].values)
+
+
+# In[7]:
+
+
+X=np.array(list(zip(pc_encoded,wbc_encoded,mc_encoded,ast_encoded,bc_encoded,ldh_encoded)))
+
+
+# In[9]:
+
+
+X
+
+
+# In[10]:
+
+
+Y
+
+
+# In[11]:
+
+
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import classification_report
+model = MultinomialNB()
+
+
+# In[12]:
+
+
+from sklearn.model_selection import train_test_split
+X_train,X_test,Y_train,Y_test=train_test_split(X,Y)
+
+
+# In[13]:
+
+
+model.fit(X_train, Y_train)
+y_pred = model.predict(X_test)
+
+
+# In[14]:
+
+
+print("Accuracy:",accuracy_score(Y_test, y_pred))
+
+
+# In[15]:
+
+
+print("\nReport")
+print(classification_report(Y_test,y_pred))
+
+
+# In[ ]:
+
+
+
+

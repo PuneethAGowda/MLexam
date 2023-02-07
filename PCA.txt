@@ -1,0 +1,112 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[1]:
+
+
+import numpy as np 
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+
+
+# In[2]:
+
+
+df=pd.read_csv(r'\Users\Puneeth\Desktop\ML LAB\PCA\iris(For PCA Program).csv')
+df.head()
+
+
+# In[3]:
+
+
+X = df.drop(['species'],axis=1)
+
+
+# In[4]:
+
+
+X_scaled = StandardScaler().fit_transform(X)
+X_scaled[:5]
+
+
+# In[5]:
+
+
+y=df['species']
+
+
+# In[6]:
+
+
+features = X_scaled.T
+cov_matrix = np.cov(features)
+cov_matrix[:5]
+
+
+# In[7]:
+
+
+values, vectors = np.linalg.eig(cov_matrix)
+values[:5]
+
+
+# In[8]:
+
+
+vectors[:5]
+
+
+# In[9]:
+
+
+explained_variances = []
+for i in range(len(values)):
+    explained_variances.append((values[i] / np.sum(values))*100)
+
+
+# In[10]:
+
+
+print("variances of each feature",explained_variances)
+
+
+# In[11]:
+
+
+plt.figure(figsize=(8,4))
+plt.bar(range(4),explained_variances, alpha=0.6)
+plt.ylabel('Percentage of explained variance')
+plt.xlabel('Dimensions')
+
+
+# In[12]:
+
+
+projected_1 = X_scaled.dot(vectors.T[0])
+projected_2 = X_scaled.dot(vectors.T[1])
+res = pd.DataFrame(projected_1, columns=['PC1'])
+res['PC2'] = projected_2
+res['Y'] = y
+res.head()
+
+
+# In[13]:
+
+
+sns.FacetGrid(res, hue="Y", height=6).map(plt.scatter, 'PC1', 'PC2').add_legend()
+plt.show()
+
+
+# In[ ]:
+
+
+
+
+
+# In[ ]:
+
+
+
+
